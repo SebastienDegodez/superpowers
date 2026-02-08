@@ -9,6 +9,34 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 **Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
 
+## ⚠️ CRITICAL: Use Task Tracking and Parallel Agents
+
+**Always use task tracking to monitor progress:**
+
+| Platform | Task Tracking Tool |
+|----------|-------------------|
+| Claude Code | `TodoWrite` tool |
+| VS Code Copilot | `manage_todo_list` tool |
+| Copilot Cli | `update_todo`  |
+| Codex | Built-in task tracking |
+
+Create a todo item for each task in the plan and update status as you work.
+
+**When tasks are marked PARALLEL in the plan:**
+
+| Platform | Agent Dispatch Tool |
+|----------|---------------------|
+| Claude Code | `Task` tool |
+| VS Code Copilot | `runSubagent` tool |
+| Copilot Cli | `task` tool |
+| Codex | `dispatch_agent` or equivalent |
+
+- Dispatch multiple subagents simultaneously
+- Each subagent works on an independent task
+- Wait for all parallel tasks to complete before proceeding to SERIAL tasks
+
+**Why:** Parallel execution dramatically speeds up independent work. Task tracking provides visibility into progress for both you and your human partner.
+
 ## When to Use
 
 ```dot
@@ -56,7 +84,7 @@ digraph process {
         "Mark task complete in TodoWrite" [shape=box];
     }
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
+    "Read plan, extract all tasks with full text, note context, create t" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
     "Use superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
@@ -84,9 +112,15 @@ digraph process {
 
 ## Prompt Templates
 
-- `./implementer-prompt.md` - Dispatch implementer subagent
-- `./spec-reviewer-prompt.md` - Dispatch spec compliance reviewer subagent
-- `./code-quality-reviewer-prompt.md` - Dispatch code quality reviewer subagent
+⚠️ **You MUST read these template files and use them when dispatching subagents:**
+
+| Template | When to use | Action |
+|----------|-------------|--------|
+| [implementer-prompt.md](implementer-prompt.md) | Dispatching implementer subagent | **READ this file**, fill in the placeholders, use as prompt |
+| [spec-reviewer-prompt.md](spec-reviewer-prompt.md) | Dispatching spec compliance reviewer | **READ this file**, fill in the placeholders, use as prompt |
+| [code-quality-reviewer-prompt.md](code-quality-reviewer-prompt.md) | Dispatching code quality reviewer | **READ this file**, fill in the placeholders, use as prompt |
+
+**Do NOT synthesize your own prompts.** The templates contain critical instructions that must be included.
 
 ## Example Workflow
 

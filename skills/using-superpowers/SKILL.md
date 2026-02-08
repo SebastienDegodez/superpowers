@@ -13,6 +13,8 @@ This is not negotiable. This is not optional. You cannot rationalize your way ou
 
 ## How to Access Skills
 
+**In VS Code GitHub Copilot:** Skills are listed in your system prompt. Use read_file to load the skill's SKILL.md file from .github/skills/<skill-name>/SKILL.md. When you read a skill, its content is presented to you—follow it directly.
+
 **In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
 
 **In other environments:** Check your platform's documentation for how skills are loaded.
